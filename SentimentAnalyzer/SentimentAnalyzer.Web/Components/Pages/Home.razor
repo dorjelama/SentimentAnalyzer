@@ -1,0 +1,34 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using SentimentAnalyzer.Web.Services
+
+<PageTitle>Sentiment Analyzer</PageTitle>
+
+<h3>Enter Feedback:</h3>
+
+<textarea @bind="SentimentText" id="sentiment" name="sentiment" type="text" rows="5" cols="100" />
+<br />
+<button @onclick="Analyze">Analyze Feedback</button>
+<br />
+<hr />
+<h4>Analysis Result = @AnalysisResult</h4>
+
+@code {
+    private string SentimentText { get; set; } = string.Empty;
+    private string AnalysisResult { get; set; } = string.Empty;
+
+    [Inject]
+    private Analyzer AnalyzerService { get; set; } = default!;
+
+    private void Analyze()
+    {
+        if (!string.IsNullOrWhiteSpace(SentimentText))
+        {
+            AnalysisResult = AnalyzerService.AnalyzeSentiment(SentimentText);
+        }
+        else
+        {
+            AnalysisResult = "Please enter a sentiment to analyze.";
+        }
+    }
+}
